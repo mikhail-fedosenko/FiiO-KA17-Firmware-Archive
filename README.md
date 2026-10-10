@@ -16,3 +16,9 @@ target in USER2, with direct USB readback verification. USER3's internal ID is 9
 **Known-bad experimental build: do not flash the custom 2.26 or its unmarked 2.25 candidate.** On 2026-10-10, the tested device produced sound only with EQ OFF; every tested EQ setting, including presets, was silent. Static analysis found illegal XS3 instruction placement in the patch generator. The binaries are retained for diagnosis, not recommended use.
 
 See the [regression analysis](patches/v226-peak-q-experimental/EQ-REGRESSION.md) and [original custom firmware notes](patches/v226-peak-q-experimental/README.md). The corrected build has USB version **2.27**; see its [build and hardware validation status](patches/v227-peak-q-experimental/README.md). The user confirmed sound after the update in response to the EQ playback check. PEQ response and Q accuracy remain unmeasured.
+
+## Firmware research handoff
+
+For firmware analysis, patch development or USB protocol work, start with the
+[firmware handoff](docs/firmware-handoff.md). It maps the container and PEQ code,
+records the XS3 pitfalls, and distinguishes verified results from open questions.
