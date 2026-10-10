@@ -4,8 +4,9 @@ As title, this repo is the collection of FiiO KA17 Firmware that exists (or not)
 ## USB preset tool
 
 [Configure USER1/USER2/USER3 without a browser](tools/KA17-PEQ-USB.md). Includes
-the user's Truthear Zero oratory1990 profiles: Harman in USER1 and personal
-target in USER2, with direct USB readback verification. USER3's internal ID is 9.
+standalone Equalizer APO profiles and arbitrary PEQ import. Current mapping:
+Truthear Nova Harman in USER1, Nova oratory1990 target in USER2, and Truthear Zero
+oratory1990 target in USER3. USER3's internal ID is 9.
 
 ## Unknown version
 - In v0.84 there is a version name ``Fiio_KA7_xmos_v134_fac_V84.bin`` that come along with other XMOS files, which i don't exactly know what that is. But haven't tested fully. I assumed ``fac`` is the factory version for QA.

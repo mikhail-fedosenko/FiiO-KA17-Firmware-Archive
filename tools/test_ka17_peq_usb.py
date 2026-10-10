@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import ka17_peq_usb as usb
 
@@ -80,6 +81,65 @@ class USBProtocolTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 usb.write_json(path, {})
             self.assertEqual(json.loads(path.read_text()), before)
+
+
+class APOImportTests(unittest.TestCase):
+    def test_comments_bom_disabled_filters_and_neutral_padding(self):
+        preset = usb.parse_apo('\ufeff# Test\nPreamp: -2.0 dB\n'
+                               'Filter 1: on peq Fc 10 Hz Gain -4.4 dB Q 0.3 # bass\n'
+                               'Filter: OFF PK Fc 100 Hz Gain 12 dB Q 1\n'
+                               'Filter 2: ON HSC Fc 10000 Hz Gain 0 dB Q 0.71\n', 'USER2')
+        self.assertEqual(preset['preamp_db'], -2)
+        self.assertEqual(len(preset['bands']), 10)
+        self.assertEqual(preset['bands'][0],
+                         dict(type='PEAK', frequency_hz=10, gain_db=-4.4, q=.3))
+        self.assertEqual(preset['bands'][1]['type'], 'HIGH_SHELF')
+        self.assertEqual(usb.decode_band(usb.band_payload(0, preset['bands'][0]), 0),
+                         preset['bands'][0])
+        self.assertTrue(all(b['gain_db'] == 0 for b in preset['bands'][2:]))
+
+    def test_unsupported_processing_precision_ranges_and_excess_bands_rejected(self):
+        valid = 'Filter: ON PK Fc 100 Hz Gain 1 dB Q 1\n'
+        for text in ('Include: other.txt\n'+valid, 'Channel: L\n'+valid,
+                     'Device: all\n'+valid, 'GraphicEQ: 20 3\n'+valid,
+                     'Filter: ON LSC Fc 100 Hz Gain 1 dB\n',
+                     'Filter: ON PK Fc 100 Hz Gain 1 dB BW Oct 1\n',
+                     valid.replace('Q 1', 'Q 0.711'),
+                     valid.replace('100 Hz', '9 Hz'),
+                     valid.replace('100 Hz', '100.5 Hz'),
+                     valid.replace('1 dB', '13 dB'),
+                     valid*11, 'Preamp: -1 dB\nPreamp: -2 dB\n'+valid,
+                     '# empty', valid.replace('ON', 'OFF')):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                usb.parse_apo(text, 'USER1')
+        with self.assertRaises(ValueError):
+            usb.parse_apo(valid, None)
+        self.assertEqual(usb.parse_apo(valid, 'USER1')['preamp_db'], 0)
+
+    def test_known_apo_files_match_screenshot_bands_and_assignment(self):
+        root = Path(__file__).resolve().parents[1]/'presets'
+        wanted = json.loads((root/'truthear-nova-zero-users.json').read_text())['presets']
+        files = ['truthear-nova-oratory1990-harman', 'truthear-nova-oratory1990-target',
+                 'truthear-zero-oratory1990-target']
+        loaded = usb.load_presets(apo=[f"{p['slot']}={root/'apo'/(name+'.txt')}"
+                                      for p, name in zip(wanted, files)])
+        for expected, actual, count in zip(wanted, loaded, (6, 6, 9)):
+            self.assertEqual(expected['slot'], actual['slot'])
+            self.assertEqual(expected['preamp_db'], actual['preamp_db'])
+            self.assertEqual(expected['bands'][:count], actual['bands'][:count])
+            self.assertTrue(all(b['gain_db'] == 0 for b in actual['bands'][count:]))
+        with self.assertRaises(ValueError):
+            usb.load_presets(apo=[f'USER1={root/"apo"/(files[0]+".txt")}']*2)
+
+    def test_bad_input_fails_before_opening_usb(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)/'bad.txt'
+            path.write_text('Include: other.txt\n')
+            with patch('sys.argv', ['ka17_peq_usb', 'apply', str(path), '--slot',
+                                   'USER1', '--backup', str(Path(directory)/'backup.json')]), \
+                    patch.object(usb, 'KA17') as device, self.assertRaises(ValueError):
+                usb.main()
+            device.assert_not_called()
 
 
 if __name__ == '__main__':

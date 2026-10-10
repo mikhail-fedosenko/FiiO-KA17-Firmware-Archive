@@ -1,0 +1,13 @@
+# Truthear Zero - oratory1990 personal target
+# Source: Earlier user screenshot; presets/truthear-zero-oratory1990.json
+# Explicit shelf Q; no KA17 stock-firmware Q workaround.
+Preamp: -3.8 dB
+Filter 1: ON PK Fc 20 Hz Gain 3.7 dB Q 1.1
+Filter 2: ON LSC Fc 100 Hz Gain 0 dB Q 0.71
+Filter 3: ON PK Fc 190 Hz Gain 2 dB Q 1.4
+Filter 4: ON PK Fc 600 Hz Gain 0.6 dB Q 1.4
+Filter 5: ON PK Fc 1370 Hz Gain -2.7 dB Q 1.4
+Filter 6: ON HSC Fc 2000 Hz Gain -1.9 dB Q 0.71
+Filter 7: ON PK Fc 2700 Hz Gain -1.8 dB Q 1.8
+Filter 8: ON PK Fc 4800 Hz Gain -1.5 dB Q 3.5
+Filter 9: ON HSC Fc 10000 Hz Gain 0 dB Q 0.71

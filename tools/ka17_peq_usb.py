@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 import json
 from pathlib import Path
+import re
 import struct
 import sys
 import time
@@ -81,7 +82,7 @@ def band_payload(index, band):
         raise ValueError('Supported band types: PEAK, LOW_SHELF, HIGH_SHELF')
     return struct.pack('>BhHHB', index,
                        scaled(band['gain_db'], 10, -12, 12, 'gain_db'),
-                       scaled(band['frequency_hz'], 1, 20, 20000, 'frequency_hz'),
+                       scaled(band['frequency_hz'], 1, 10, 20000, 'frequency_hz'),
                        scaled(band['q'], 100, .25, 8, 'q'), TYPES[band['type']])
 
 
@@ -117,6 +118,75 @@ def validate_document(document):
         for index, band in enumerate(bands):
             band_payload(index, band)
     return presets
+
+
+APO_TYPES = {'PK': 'PEAK', 'PEQ': 'PEAK', 'LS': 'LOW_SHELF',
+             'LSC': 'LOW_SHELF', 'HS': 'HIGH_SHELF', 'HSC': 'HIGH_SHELF'}
+APO_NUMBER = r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)'
+
+
+def parse_apo(text, slot, label='Equalizer APO'):
+    """Import a shared-channel PEQ, refusing unsupported APO processing.
+
+    Explicit Q avoids guessing shelf slope, bandwidth or a default Q that
+    cannot be represented exactly by KA17. OFF filters consume no device band.
+    """
+    if slot not in SLOTS:
+        raise ValueError('APO input requires --slot USER1, USER2 or USER3')
+    preamp, bands = None, []
+    for line_number, raw in enumerate(text.lstrip('\ufeff').splitlines(), 1):
+        line = raw.split('#', 1)[0].strip()
+        if not line:
+            continue
+        gain = re.fullmatch(rf'Preamp\s*:\s*({APO_NUMBER})\s*dB', line, re.I)
+        if gain:
+            if preamp is not None:
+                raise ValueError(f'APO line {line_number}: multiple preamps are unsupported')
+            preamp = float(gain[1])
+            continue
+        match = re.fullmatch(
+            rf'Filter(?:\s+\d+)?\s*:\s*(ON|OFF)\s+(PK|PEQ|LSC|HSC|LS|HS)'
+            rf'\s+Fc\s+({APO_NUMBER})\s*Hz\s+Gain\s+({APO_NUMBER})\s*dB'
+            rf'\s+Q\s+({APO_NUMBER})', line, re.I)
+        if not match:
+            raise ValueError(f'APO line {line_number}: expected Preamp or PK/PEQ/LSC/HSC '
+                             'filter with Fc, Gain and explicit Q; other processing is unsupported')
+        if match[1].upper() == 'ON':
+            band = {'type': APO_TYPES[match[2].upper()], 'frequency_hz': float(match[3]),
+                    'gain_db': float(match[4]), 'q': float(match[5])}
+            try:
+                band_payload(len(bands), band)
+            except ValueError as exc:
+                raise ValueError(f'APO line {line_number}: {exc}') from exc
+            bands.append(band)
+    if not bands:
+        raise ValueError('APO input needs at least one enabled filter')
+    bands.extend({'type': 'PEAK', 'frequency_hz': 1000, 'gain_db': 0, 'q': 1}
+                 for _ in range(10-len(bands)))
+    preset = {'slot': slot, 'label': label, 'preamp_db': 0 if preamp is None else preamp,
+              'bands': bands}
+    validate_document({'schema': 1, 'presets': [preset]})
+    return preset
+
+
+def load_presets(file=None, slot=None, apo=()):
+    if file is not None and apo:
+        raise ValueError('Use either a preset file or --apo SLOT=FILE entries')
+    if slot is not None and (file is None or file.suffix.lower() == '.json'):
+        raise ValueError('--slot is only for a single APO file; JSON already names its slots')
+    if file is not None:
+        if file.suffix.lower() == '.json':
+            return validate_document(json.loads(file.read_text(encoding='utf-8')))
+        presets = [parse_apo(file.read_text(encoding='utf-8-sig'), slot, file.stem)]
+    else:
+        presets = []
+        for assignment in apo:
+            target, separator, name = assignment.partition('=')
+            if not separator or not name:
+                raise ValueError('--apo must be USER1=path, USER2=path or USER3=path')
+            path = Path(name)
+            presets.append(parse_apo(path.read_text(encoding='utf-8-sig'), target, path.stem))
+    return validate_document({'schema': 1, 'presets': presets})
 
 
 class KA17:
@@ -241,21 +311,22 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     check = commands.add_parser('validate', help='Validate preset file without USB access')
-    check.add_argument('file', type=Path)
     commands.add_parser('show', help='Read currently active preset without changing it')
     read = commands.add_parser('read', help='Read slots, temporarily selecting each; restore active slot')
     read.add_argument('--slots', nargs='+', choices=SLOTS, default=list(SLOTS))
     read.add_argument('--output', type=Path, required=True)
     verify = commands.add_parser('verify', help='Compare saved slots with a file, without rewriting them')
-    verify.add_argument('file', type=Path)
     apply = commands.add_parser('apply', help='Back up, write and read back the named USER slots')
-    apply.add_argument('file', type=Path)
     apply.add_argument('--backup', type=Path, required=True)
+    for command in (check, verify, apply):
+        command.add_argument('file', type=Path, nargs='?', help='Preset JSON or APO text file')
+        command.add_argument('--slot', choices=SLOTS, help='Destination for a single APO file')
+        command.add_argument('--apo', action='append', default=[], metavar='SLOT=FILE',
+                             help='Import an APO file into a slot; repeat for multiple slots')
     args = parser.parse_args()
-    document = None
-    if hasattr(args, 'file'):
-        document = json.loads(args.file.read_text())
-        presets = validate_document(document)  # Validate everything before opening USB.
+    if args.command in ('validate', 'verify', 'apply'):
+        # Validate every file before opening USB or changing even the active slot.
+        presets = load_presets(args.file, args.slot, args.apo)
     if args.command == 'validate':
         print(json.dumps({'valid': True, 'slots': [p['slot'] for p in presets]}))
         return

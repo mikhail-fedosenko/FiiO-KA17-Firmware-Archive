@@ -1,0 +1,207 @@
+{
+  "schema": 1,
+  "source": "Nova: user screenshots supplied 2026-10-10. Zero: existing user-screenshot preset, personal oratory1990 target. Direct Q for custom KA17 2.27; neutral unused bands.",
+  "presets": [
+    {
+      "slot": "USER1",
+      "label": "Truthear Nova - oratory1990 Harman",
+      "preamp_db": 0.1,
+      "bands": [
+        {
+          "type": "LOW_SHELF",
+          "frequency_hz": 110,
+          "gain_db": -1,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1270,
+          "gain_db": -1.1,
+          "q": 1.8
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 2500,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 3000,
+          "gain_db": -1.2,
+          "q": 3
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 7000,
+          "gain_db": -2,
+          "q": 2.5
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 10000,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        }
+      ]
+    },
+    {
+      "slot": "USER2",
+      "label": "Truthear Nova - oratory1990 target",
+      "preamp_db": -2,
+      "bands": [
+        {
+          "type": "PEAK",
+          "frequency_hz": 120,
+          "gain_db": 2.3,
+          "q": 0.6
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 10,
+          "gain_db": -4.4,
+          "q": 0.3
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1350,
+          "gain_db": -2.9,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 3000,
+          "gain_db": -2.7,
+          "q": 2
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 4000,
+          "gain_db": -3,
+          "q": 0.71
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 10000,
+          "gain_db": 1,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        }
+      ]
+    },
+    {
+      "slot": "USER3",
+      "label": "Truthear Zero - oratory1990 personal target",
+      "preamp_db": -3.8,
+      "bands": [
+        {
+          "type": "PEAK",
+          "frequency_hz": 20,
+          "gain_db": 3.7,
+          "q": 1.1
+        },
+        {
+          "type": "LOW_SHELF",
+          "frequency_hz": 100,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 190,
+          "gain_db": 2,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 600,
+          "gain_db": 0.6,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1370,
+          "gain_db": -2.7,
+          "q": 1.4
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 2000,
+          "gain_db": -1.9,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 2700,
+          "gain_db": -1.8,
+          "q": 1.8
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 4800,
+          "gain_db": -1.5,
+          "q": 3.5
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 10000,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1000,
+          "gain_db": 0,
+          "q": 1
+        }
+      ]
+    }
+  ]
+}

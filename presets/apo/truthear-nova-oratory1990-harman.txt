@@ -1,0 +1,10 @@
+# Truthear Nova - oratory1990 Harman
+# Source: User screenshot 1, 2026-10-10
+# Explicit shelf Q; no KA17 stock-firmware Q workaround.
+Preamp: 0.1 dB
+Filter 1: ON LSC Fc 110 Hz Gain -1 dB Q 0.71
+Filter 2: ON PK Fc 1270 Hz Gain -1.1 dB Q 1.8
+Filter 3: ON HSC Fc 2500 Hz Gain 0 dB Q 0.71
+Filter 4: ON PK Fc 3000 Hz Gain -1.2 dB Q 3
+Filter 5: ON PK Fc 7000 Hz Gain -2 dB Q 2.5
+Filter 6: ON HSC Fc 10000 Hz Gain 0 dB Q 0.71

@@ -16,12 +16,21 @@ Paths below are relative to the repository root unless explicitly absolute.
   After reconnection, FiiO `findDev` returned `0x227`; macOS reported
   `bcdDevice=551`. The user confirmed sound after the EQ playback check.
   This is not a frequency-response measurement.
-- USER1 contains the first supplied oratory1990 Truthear Zero profile (Harman).
-  USER2 contains the second profile (oratory1990's personal target).
-  Writes and all parameters were checked by **direct HID readback**, then by
-  another write using the new CLI and readback after switching slots.
-  USER3 was not overwritten. USER2 was active at the last check; query the device
-  again when current state matters.
+- Current mapping, updated later on 2026-10-10: USER1 is Truthear Nova/Harman
+  (new screenshot 1, preamp +0.1 dB), USER2 is Nova/oratory1990 target (new
+  screenshot 2, preamp -2.0 dB), USER3 is Truthear Zero/oratory1990 personal target
+  (previous screenshot, preamp -3.8 dB). All three were imported from standalone
+  APO files, saved and checked by direct HID readback after switching slots.
+  USER2 remains active. Its second peak stores exactly 10 Hz, -4.4 dB, Q=0.30;
+  the CLI minimum frequency was extended from 20 to 10 Hz. This proves parameter
+  storage, not the filter's audio response or power-cycle persistence.
+- The CLI now supports single APO files with `--slot USER1/2/3` and multiple
+  `--apo USER1=file.txt` arguments. All four known Nova/Zero profiles are under
+  `presets/apo/`; the current three-slot mapping is
+  `presets/truthear-nova-zero-users.json`. The older Zero-only JSON retains its
+  historical USER1/USER2 destinations, so applying it replaces those slots.
+  The APO importer accepts explicit Q peak/low/high shelves and rejects APO
+  processing that cannot be represented faithfully. All 14 regression tests pass.
 - Authorization for that specific 2.27 flash has already been fulfilled.
   A later session must not independently reflash or change other settings merely
   because this handoff records the previous authorization.
@@ -42,7 +51,7 @@ reconstructing the entire investigation.
 | Independent check for forbidden short stack-memory placement | [ka17_xs3_lanes.py](../tools/ka17_xs3_lanes.py) |
 | Numerical-error reproduction | [ka17_precision_check.py](../tools/ka17_precision_check.py) |
 | Browser-free PEQ control, protocol, commands and limits | [USB guide](../tools/KA17-PEQ-USB.md), [CLI](../tools/ka17_peq_usb.py) |
-| Exact values from the two supplied screenshots | [Preset JSON](../presets/truthear-zero-oratory1990.json) |
+| Current Nova/Zero slot mapping and standalone APO profiles | [Current JSON](../presets/truthear-nova-zero-users.json), [APO files](../presets/apo/), [historical Zero JSON](../presets/truthear-zero-oratory1990.json) |
 | Tests | [Lane tests](../tools/test_ka17_xs3_lanes.py), [USB tests](../tools/test_ka17_peq_usb.py) |
 
 Local operation records excluded from Git (not available in a fresh clone):
@@ -56,7 +65,11 @@ Local operation records excluded from Git (not available in a fresh clone):
   readback of the already-installed profiles.
 - `presets/backups/2026-10-10-before-cli-validation.json`: valid backup before
   the CLI qualification write; contains the oratory profiles, not older settings.
-- `presets/backups/2026-10-10-cli-apply-result.json`: successful CLI write.
+- `presets/backups/2026-10-10-cli-apply-result.json`: successful earlier Zero CLI write.
+- `presets/backups/2026-10-10-before-nova-zero-apo.json`: all three slots before
+  the latest Nova/Zero assignment.
+- `presets/backups/2026-10-10-after-nova-zero-apo.json`: subsequent direct HID
+  snapshot of all three latest slots.
 
 ## 3. What “reading the firmware” means
 
@@ -246,7 +259,7 @@ the web application is unnecessary for these established operations.
   the current UI/CLI limit of Q<=8; distinguish the research grid from supported
   user inputs.
 - The last `python -m unittest discover -s tools -p 'test_*.py' -v` run passed
-  **10 tests**. `git diff --check` also passed.
+  **14 tests**. `git diff --check` also passed.
 - Trusting the old model alone led to the 2.26 regression: mathematical checks
   missed illegal instruction execution. Each subsequent change needs an
   independent check of its new risks, not only the same assembler/decoder.
