@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "source": "User-provided oratory1990 screenshots, 2026-10-10. RBJ Q entered directly for custom firmware 2.27. Unused bands neutralized.",
+  "presets": [
+    {
+      "slot": "USER1",
+      "label": "Truthear Zero - oratory1990 Harman",
+      "preamp_db": -8.1,
+      "bands": [
+        {
+          "type": "PEAK",
+          "frequency_hz": 70,
+          "gain_db": -11.5,
+          "q": 0.35
+        },
+        {
+          "type": "LOW_SHELF",
+          "frequency_hz": 105,
+          "gain_db": 10,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 190,
+          "gain_db": 4.8,
+          "q": 0.7
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 620,
+          "gain_db": 0.8,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1300,
+          "gain_db": -1.4,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 2700,
+          "gain_db": -1.6,
+          "q": 2
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 5000,
+          "gain_db": -2.6,
+          "q": 3
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 10000,
+          "gain_db": -4,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 8000,
+          "gain_db": 0,
+          "q": 1
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 16000,
+          "gain_db": 0,
+          "q": 1
+        }
+      ]
+    },
+    {
+      "slot": "USER2",
+      "label": "Truthear Zero - oratory1990 personal target",
+      "preamp_db": -3.8,
+      "bands": [
+        {
+          "type": "PEAK",
+          "frequency_hz": 20,
+          "gain_db": 3.7,
+          "q": 1.1
+        },
+        {
+          "type": "LOW_SHELF",
+          "frequency_hz": 100,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 190,
+          "gain_db": 2,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 600,
+          "gain_db": 0.6,
+          "q": 1.4
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 1370,
+          "gain_db": -2.7,
+          "q": 1.4
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 2000,
+          "gain_db": -1.9,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 2700,
+          "gain_db": -1.8,
+          "q": 1.8
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 4800,
+          "gain_db": -1.5,
+          "q": 3.5
+        },
+        {
+          "type": "HIGH_SHELF",
+          "frequency_hz": 10000,
+          "gain_db": 0,
+          "q": 0.71
+        },
+        {
+          "type": "PEAK",
+          "frequency_hz": 16000,
+          "gain_db": 0,
+          "q": 1
+        }
+      ]
+    }
+  ]
+}

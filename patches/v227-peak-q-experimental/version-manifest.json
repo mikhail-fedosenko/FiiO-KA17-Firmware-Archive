@@ -1,0 +1,169 @@
+{
+  "status": "EXPERIMENTAL_USB_VERSION_MARKER_ONLY",
+  "source_sha256": "6dd84c988634e027677cff6a050ef5a1d69d5248d83d08c719e8a1d713523652",
+  "candidate_sha256": "ce6b13a6b05626a32746954bf9cf0ee262f010920259e66956606d53c78d519b",
+  "usb_bcdDevice": "0x0227",
+  "displayed_usb_version": "2.27",
+  "source_lane_fix": true,
+  "official_release": false,
+  "mcu_version_changed": false,
+  "file_size": 811008,
+  "changed_bytes_from_peak_candidate": 25,
+  "descriptor_offsets": {
+    "1": [
+      "0xf820",
+      "0xfa08"
+    ],
+    "3": [
+      "0x3e670",
+      "0x3e688",
+      "0x3e8c0"
+    ],
+    "6": [
+      "0xa2970",
+      "0xa2b18"
+    ],
+    "7": [
+      "0xba668",
+      "0xba810"
+    ]
+  },
+  "checks": [
+    "All source and output image/tile CRCs valid",
+    "All DSP tiles byte-identical to peak candidate",
+    "MCU image and image selection IDs unchanged",
+    "Reversible to exact source SHA-256"
+  ],
+  "limitations": [
+    "On-device display may report unchanged MCU version 2.25",
+    "PEQ accuracy limitations from original candidate remain",
+    "USB version confirms identification only, not audio response"
+  ],
+  "edits": [
+    {
+      "offset": "0xf82c",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0xfa14",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0x1309c",
+      "before": "71",
+      "after": "f3"
+    },
+    {
+      "offset": "0x1309d",
+      "before": "75",
+      "after": "d2"
+    },
+    {
+      "offset": "0x1309e",
+      "before": "4e",
+      "after": "14"
+    },
+    {
+      "offset": "0x1309f",
+      "before": "b6",
+      "after": "74"
+    },
+    {
+      "offset": "0x3e67c",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0x3e694",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0x3e8cc",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0x4070c",
+      "before": "7a",
+      "after": "6f"
+    },
+    {
+      "offset": "0x4070d",
+      "before": "67",
+      "after": "02"
+    },
+    {
+      "offset": "0x4070e",
+      "before": "65",
+      "after": "b3"
+    },
+    {
+      "offset": "0x4070f",
+      "before": "7f",
+      "after": "94"
+    },
+    {
+      "offset": "0xa297c",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0xa2b24",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0xa4964",
+      "before": "b8",
+      "after": "5e"
+    },
+    {
+      "offset": "0xa4965",
+      "before": "3d",
+      "after": "d8"
+    },
+    {
+      "offset": "0xa4966",
+      "before": "42",
+      "after": "56"
+    },
+    {
+      "offset": "0xa4967",
+      "before": "d9",
+      "after": "50"
+    },
+    {
+      "offset": "0xba674",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0xba81c",
+      "before": "52",
+      "after": "72"
+    },
+    {
+      "offset": "0xbcbac",
+      "before": "60",
+      "after": "4b"
+    },
+    {
+      "offset": "0xbcbad",
+      "before": "c1",
+      "after": "0c"
+    },
+    {
+      "offset": "0xbcbae",
+      "before": "23",
+      "after": "7e"
+    },
+    {
+      "offset": "0xbcbaf",
+      "before": "f9",
+      "after": "62"
+    }
+  ]
+}
